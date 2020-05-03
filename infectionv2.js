@@ -1,22 +1,10 @@
 var balls;
 var BALL_SIZE = 20;
 var BALL_SPEED = 3;
-var MAX_BALLS = 3;
-var BRICK_THRESHOLD = 5;
+var MAX_BALLS = 6;
 var score;
 var isGameOver;
 var showStartScreen;
-var bricks;
-var brickLevel;
-
-function createBrick() {
-  return {
-    x: random(0, width),
-    y: random(0, height),
-    width: random(50, width / 4),
-    height: random(50, height / 4),
-  }
-}
 
 function createBall() {
   return {
@@ -34,8 +22,6 @@ function setup() {
   mySound.play();
   showStartScreen = true;
   balls = [];
-  bricks = [];
-  brickLevel = 0;
 }
 
 //Music
@@ -97,12 +83,6 @@ function draw() {
 
     ballCollision(balls);
 
-    //adding bricks
-    if (score % 5 == 0 && score > 0 && score > brickLevel) {
-      brickLevel = score;
-      bricks = [createBrick(), createBrick()];
-    }
-
     //Adding balls
     if (frameCount % 120 == 0 && balls.length < MAX_BALLS) {
       balls.push(createBall());
@@ -112,16 +92,6 @@ function draw() {
       }
     }
   }
-
-  // draw bricks
-  if (!showStartScreen && !isGameOver) {
-    for (var brick of bricks) {
-      fill(352, 67, 70);
-      rect(brick.x, brick.y, brick.width, brick.height);
-    }
-  }
-
-
 }
 
 
@@ -178,62 +148,6 @@ function ballCollision(balls) {
       var ballB = balls[j];
 
       // check if balls collided
-      // console.log(dist(ballA.x, ballA.y, ballB.x, ballB.y));
-      if (dist(ballA.x, ballA.y, ballB.x, ballB.y) <= BALL_SIZE * 2) {
-        ballA.color = random(10, 80)
-        ballB.color = random(10, 80)
-        var aXSpeed = ballA.xSpeed;
-        var aYSpeed = ballA.ySpeed;
-        ballA.xSpeed = ballB.xSpeed;
-        ballA.ySpeed = ballB.ySpeed;
-        ballB.xSpeed = aXSpeed;
-        ballB.ySpeed = aYSpeed;
-      }
-    }
-  }
-}
-
-function brickCollision(balls, bricks) {
-  for (var i in balls) {
-    var ball = balls[i];
-    for (var j in bricks) {
-      var brick = bricks[j];
-
-      // check if ball collided with brick
-      if (ball.x) {
-          
-      }
-      
-      
-      
-      // left side of brick
-      if (ball.x < ) {
-        bounceSound.play();
-        ball.xSpeed *= -1;
-      }
-
-      //Right edge barrier
-      if (ball.x > height - BALL_SIZE) {
-        bounceSound.play();
-        ball.xSpeed *= -1;
-      }
-
-      //Bottom edge barrier
-      if (ball.y > width - BALL_SIZE) {
-        bounceSound.play();
-        ball.ySpeed *= -1;
-      }
-
-      // top of brick
-      if (ball.y < BALL_SIZE) {
-        bounceSound.play();
-        ball.ySpeed *= -1;
-
-      }
-
-
-
-
       if (dist(ballA.x, ballA.y, ballB.x, ballB.y) <= BALL_SIZE * 2) {
         ballA.color = random(10, 80)
         ballB.color = random(10, 80)
@@ -259,6 +173,4 @@ function startGame() {
   balls = [createBall()];
   score = 0;
   isGameOver = false;
-  bricks = [];
-  brickLevel = 0;
 }
